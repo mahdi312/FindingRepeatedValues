@@ -1,34 +1,36 @@
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.collection.IsCollectionWithSize;
+import org.hamcrest.collection.IsIterableContainingInOrder;
+import org.hamcrest.core.IsCollectionContaining;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import static org.junit.Assert.*;
-
-public class RepeatedValuesTest {
-
+class RepeatedValuesTest {
     @Test
-    public void findRepeatedStrings(){
-        List<String> stringList = new ArrayList<String>(Arrays.asList("ali","mahdi","hadi","mahdi","mojtaba","mohammad","mojtaba"));
-        RepeatedValues repeatedValues = new RepeatedValues();
-        Set values = repeatedValues.findRepeatedValues(stringList);
-        for (Object i :
-                values) {
-            System.out.println(i);
-        }
+    void findRepeatedStrings(){
+        List<String> stringList = new ArrayList<>
+                (Arrays.asList("ali", "mahdi", "hadi", "mahdi", "mojtaba", "mohammad", "mojtaba"));
+
+        RepeatedValues<String> repeatedValues = new RepeatedValues<>();
+        Set<String> values = repeatedValues.findRepeatedValues(stringList);
+
+        MatcherAssert.assertThat(values, IsIterableContainingInOrder.contains("mahdi", "mojtaba"));
+        MatcherAssert.assertThat(values, IsCollectionWithSize.hasSize(2));
     }
 
     @Test
-    public void findRepeatedDecimals(){
-        List<Integer> doubleslist = new ArrayList<Integer>(Arrays.asList(10, 4, 8, 1, 12, 5, 5, 8, 7, 5, 6, 9, 3, 12, 8, 87, 8));
-        RepeatedValues repeatedValues = new RepeatedValues();
-        Set values = repeatedValues.findRepeatedValues(doubleslist);
-        for (Object i :
-                values) {
-            System.out.println(i);
-        }
+    void findRepeatedNumbers(){
+        List<Integer> numbers = new ArrayList<>
+                (Arrays.asList(5,20,48,6,2,7,9,3,2,6,8,5,12,8));
+
+        RepeatedValues<Integer> repeatedValues = new RepeatedValues<>();
+        Set<Integer> values = repeatedValues.findRepeatedValues(numbers);
+
+        MatcherAssert.assertThat(values , IsCollectionContaining.hasItems(2,5,6,8));
+        MatcherAssert.assertThat(values, IsCollectionWithSize.hasSize(4));
     }
 
 }
